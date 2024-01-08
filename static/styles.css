@@ -2,6 +2,10 @@
     content: "\f09b";
 }
 
+nav {
+    background-color: #181a1f;
+}
+
 .nav-container {
     display: flex;
     align-items: center;
@@ -10,47 +14,83 @@
 }
 
 body {
-    background-color: #696969;
+    background-color: #181a1f;
+}
+
+.container {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.flashes {
+    color: rgb(255, 50, 50);
+    padding: 0;
+    margin-bottom: 1rem;
+    list-style-type: none;
+    text-align: left;
+}
+
+.form-signup {
+    margin-top: 3rem;
+}
+
+.form-signup label, .form-signup p {
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.form-signup .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signup .form-control:focus {
+    z-index: 2;
+}
+
+.form-signup input[type="text"], .form-signup input[type="password"] {
+    margin-bottom: 10px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 #gold {
     color: #efb90b;
 }
 
-.login {
-    color: #343a40;
+.register {
+    margin-top: 1rem;
+}
+
+.login, .register {
+    color: #181a1f;
     background-color: #efb90b;
 }
 
-.login:hover {
-    color: #343a40;
+.login:hover, .register:hover {
+    color: #181a1f;
     background-color: #efba0bdf;
-}
-
-.register {
-    color: #efb90b;
-}
-
-.register:hover {
-    color: #efb90b;
-    background-color: #343a40;
-    border: #efb90b solid 1px;
 }
 
 .logout {
     color: #efb90b;
-    background-color: #343a40;
+    background-color: #181a1f;
     border: #efb90b solid 1px;
 }
 
 .logout:hover {
     color: #efb90b;
-    background-color: #343a40;
+    background-color: #181a1f;
 }
 
 .footer {
     color: white;
-    background-color: #343a40;
+    background-color: #181a1f;
     position: absolute;
     bottom: 0;
     left: 0;

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <form action="/register" method="post" class="form-signup">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <label for="inputEmail">Email Address</label>
+        <input type="text" id="inputEmail" name="email" class="form-control" placeholder="Email" value="{{ email }}" required autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <label for="inputConfirmPassword">Confirm Password</label>
+        <input type="password" id="inputConfirmPassword" name="confirmation" class="form-control" placeholder="Confirm Password" required>
+        <button class="btn btn-lg btn-block register" type="submit">Sign up</button>
+        <p class="mt-5 mb-3 text-center">Already have an account? <a href="/login">Log in</a></p>
+    </form>
+</div>
+{% endblock %}
