@@ -31,6 +31,7 @@
                         <a class="nav-link" href="/wallet">Wallet</a>
                     </li>
                 </ul>
+                {% block sidebar %} 
                 <ul class="navbar-nav mt-2 mt-lg-0">
                     {% if session['user_id'] %}
                     <li class="nav-item">
@@ -38,10 +39,14 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
+                        <a class="btn btn-dark register" href="/register" role="button">Register</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="btn btn-dark login" href="/login" role="button">Log In</a>
                     </li>
                     {% endif %}
                 </ul>
+                {% endblock %}
             </div>
         </nav>
         <main>

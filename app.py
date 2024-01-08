@@ -22,10 +22,12 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # Define a route for the home page
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -80,6 +82,51 @@ def register():
     else:
         return render_template("register.html")
 
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        def apology(message, code):
+            """Render an apology to the user."""
+            flash(message)
+            return render_template('login.html'), code
+
+        if not request.form.get("email"):
+            return apology("Must provide email", 400)
+
+        elif not request.form.get("password"):
+            return apology("Must provide password", 400)
+
+        rows = db.execute(
+            "SELECT * FROM users WHERE email = ?", request.form.get("email"))
+
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("Invalid email and/or password", 400)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        return redirect("/")
+
+    else:
+        return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    return redirect("/")
 
 # Run the application
 if __name__ == '__main__':

@@ -4,6 +4,8 @@
 Register
 {% endblock %}
 
+{% block sidebar %}{% endblock %}
+
 {% block main %}
 <div class="container">
     <form action="/register" method="post" class="form-signup">
@@ -22,7 +24,7 @@ Register
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
         <label for="inputConfirmPassword">Confirm Password</label>
         <input type="password" id="inputConfirmPassword" name="confirmation" class="form-control" placeholder="Confirm Password" required>
-        <button class="btn btn-lg btn-block register" type="submit">Sign up</button>
+        <button class="btn btn-lg btn-block signup" type="submit">Sign up</button>
         <p class="mt-5 mb-3 text-center">Already have an account? <a href="/login">Log in</a></p>
     </form>
 </div>

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block main %}
+<div class="container">
+    <form action="/login" method="post" class="form-signin">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <label for="inputEmail">Email Address</label>
+        <input type="text" id="inputEmail" name="email" class="form-control" placeholder="Email" value="{{ email }}" required autofocus>
+        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-block login" type="submit">Log in</button>
+        <p class="mt-5 mb-3 text-center">Don't have an account? <a href="/register">Sign up</a></p>
+    </form>
+</div>
+{% endblock %}
