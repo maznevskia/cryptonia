@@ -2,10 +2,6 @@
     content: "\f09b";
 }
 
-nav {
-    background-color: #181a1f;
-}
-
 .nav-container {
     display: flex;
     align-items: center;
@@ -13,8 +9,134 @@ nav {
     text-align: center;
 }
 
+.nav-link {
+    color: white !important;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: #181a1f;
+}
+
+main {
+    flex: 1 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+    grid-gap: 20px;
+    justify-items: center;
+    align-items: center;
+    background-color: #181a1f;
+    color: white;
+    padding: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #ccc;
+}
+
+main > div {
+    margin: 10px;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+main > div:only-of-type {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
+    grid-column: 1 / -1;
+    justify-self: center;
+}
+
+.faq {
+    width: 100%;
+}
+
+.faq h2 {
+    text-align: center;
+    margin: 0;
+    padding: 1rem;
+}
+
+.accordion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #181a1f;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.3s;
+    position: relative;
+}
+
+.accordion h4 {
+    flex: 1;
+    text-align: left;
+    padding-right: 2rem; /* Adjust this value to suit your needs */
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #efb90b;
+    color: black;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+}
+
+.accordion:hover .toggle-icon,
+.accordion.active .toggle-icon {
+    background-color: #22262d;
+    color: #efb90b;
+}
+
+.active, .accordion:hover {
+    background-color: #22262d;
+    color: white;
+}
+
+.accordion:focus {
+    outline: none;
+}
+
+.panel {
+    padding: 0 18px;
+    color: white;
+    background-color: #22262d;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.panel p {
+    margin: .5rem;
 }
 
 .container {
@@ -29,6 +151,78 @@ body {
     margin-bottom: 1rem;
     list-style-type: none;
     text-align: left;
+}
+
+.index-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 2px solid #efb90b;
+    background-color: #1e2329;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+}
+
+.index-table th,
+.index-table td {
+    font-size: 1.2rem;
+    border-bottom: 2px solid #efb90b;
+    padding: 10px;
+    text-align: center;
+}
+
+.index-table .coin-image {
+    width: 2rem;
+    height: auto;
+}
+
+.index-table td:first-child {
+    text-align: left;
+}
+
+.index-table td:nth-child(2),
+.index-table td:nth-child(3) {
+    text-align: right;
+}
+
+.index-table tr:last-child td {
+    border-bottom: none;
+}
+
+.index-table tfoot td {
+    border-top: 2px solid #efb90b;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.show-all-coins {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+}
+
+@media (min-width: 600px) {
+    body {
+        justify-content: flex-end;
+    }
+
+    .show-all-coins {
+        width: 100%;
+    }
+}
+
+.change-positive {
+    color: green;
+}
+
+.change-negative {
+    color: red;
 }
 
 .form-signup, .form-signin {
@@ -53,7 +247,7 @@ body {
     z-index: 2;
 }
 
-.form-signup input[type="text"], .form-signup input[type="password"], .form-signin input[type="text"], .form-signin input[type="password"] {
+.form-signup input[type="email"], .form-signup input[type="password"], .form-signin input[type="email"], .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -101,10 +295,10 @@ body {
     background-color: #181a1f;
 }
 
-.footer {
+footer {
     color: white;
     background-color: #181a1f;
-    position: absolute;
+    position: relative;
     bottom: 0;
     left: 0;
     display: flex;
@@ -116,9 +310,10 @@ body {
     text-align: center;
     line-height: normal;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
-.footer p {
+footer p {
     margin: 0;
 }
 

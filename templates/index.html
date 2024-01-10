@@ -1,7 +1,66 @@
 {% extends "layout.html" %}
 
 {% block title %}
+Home
 {% endblock %}
 
 {% block main %}
+<div class="index-header">
+    <h1>Welcome to CRYPTONIA</h1>
+    <p>Unlock the Future of Finance with CRYPTONIA</p>
+    <p>Are you ready to embark on a journey into the world of digital currency? Look no further!</p>
+    <p>CRYPTONIA is your gateway to the exciting realm of cryptocurrencies. Whether you're a seasoned investor or just starting, our platform offers a user-friendly and secure environment to explore, invest, and thrive in the crypto space.</p>
+</div>
+
+<table class="index-table">
+    <tbody>
+    {% for coin in coins %}
+        <tr>
+            <td>
+                <img src="https://cryptologos.cc/logos/{{ coin['name'] | replace(' ', '-') | lower }}-{{ coin['symbol'] | lower }}-logo.png"
+                 alt="" class="coin-image" onerror="this.onerror=null; this.src='usd-coin-usdc-logo.png';">
+                {{ coin['symbol'] }}</td>
+            <td>${{ '{:,.2f}'.format(coin['price_usd']|float) }}</td>
+            <td><span class="{% if coin['percent_change_24h'] | float > 0 %}change-positive{% elif coin['percent_change_24h'] | float < 0 %}change-negative{% endif %}">{{ coin['percent_change_24h'] }}%</span></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                <a href="/markets" class="show-all-coins">Show all coins 
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="css-1l3piql" width="20" height="20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.288 12l-3.89 3.89 1.768 1.767L15.823 12l-1.768-1.768-3.889-3.889-1.768 1.768 3.89 3.89z" fill="currentColor"></path>
+                    </svg>
+                </a>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<div class="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <button class="accordion"><h4>What is a cryptocurrency exchange?</h4><span class="toggle-icon">+</span></button>
+    <div class="panel">
+        <p><span id="gold">Cryptocurrency</span> exchanges are digital marketplaces that enable users to buy and sell cryptocurrencies like <span id="gold">Bitcoin</span>, <span id="gold">Ethereum</span>, and <span id="gold">Tether</span>. The Cryptonia exchange is the largest crypto exchange by trade volume.</p>
+    </div>
+
+    <button class="accordion"><h4>How to buy Bitcoin and other cryptocurrencies on Cryptonia</h4><span class="toggle-icon">+</span></button>
+    <div class="panel">
+        <p>Buying crypto on Cryptonia is easy!</p>
+        <ul>
+            <li><span id="gold">Sign up</span> for a free account on Cryptonia.</li>
+            <li><span id="gold">Verify</span> your identity.</li>
+            <li><span id="gold">Deposit funds</span> into your account.</li>
+            <li><span id="gold">Buy</span> your favorite cryptocurrencies.</li>
+        </ul>
+    </div>
+
+    <button class="accordion"><h4>Why choose Cryptonia</h4><span class="toggle-icon">+</span></button>
+    <div class="panel">
+        <p>Cryptonia is the world's <span id="gold">largest cryptocurrency exchange</span> by trade volume. <span id="gold">Trusted by millions</span> of users worldwide, Cryptonia is the ideal place to <span id="gold">buy, sell, and manage</span> your cryptocurrency portfolio.</p>
+    </div>
+</div>
 {% endblock %}

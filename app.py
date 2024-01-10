@@ -1,4 +1,5 @@
 import re
+import requests
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
@@ -23,17 +24,18 @@ def after_request(response):
     return response
 
 
-# Define a route for the home page
 @app.route('/')
 def home():
-    return render_template('index.html')
+    response = requests.get('https://api.coinlore.net/api/tickers/')
+    data = response.json()
+    coins = data['data'][:5]
+    return render_template('index.html', coins=coins)
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
     if 'user_id' in session:
-        # Redirect to home page
         return redirect(url_for('home'))
     
     elif request.method == "POST":
@@ -75,7 +77,6 @@ def register():
             request.form.get("email"),
             generate_password_hash(request.form.get("password")))
 
-        # Remember which user has logged in
         session["user_id"] = result
 
         return redirect("/")
@@ -87,10 +88,8 @@ def register():
 def login():
     """Log user in"""
 
-    # Forget any user_id
     session.clear()
 
-    # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
         def apology(message, code):
@@ -110,7 +109,6 @@ def login():
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return apology("Invalid email and/or password", 400)
 
-        # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
         return redirect("/")
@@ -123,11 +121,9 @@ def login():
 def logout():
     """Log user out"""
 
-    # Forget any user_id
     session.clear()
 
     return redirect("/")
 
-# Run the application
 if __name__ == '__main__':
     app.run(debug=True)
