@@ -9,6 +9,10 @@
     text-align: center;
 }
 
+.nav-container img {
+    margin-right: .5rem;
+}
+
 .nav-link {
     color: white !important;
 }
