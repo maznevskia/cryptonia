@@ -1,3 +1,10 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    const copyrightElement = document.getElementById('copyright');
+    if (copyrightElement) {
+        copyrightElement.textContent += ' ' + new Date().getFullYear();
+    }
+});
+
 var acc = document.getElementsByClassName("accordion");
 
 for (var i = 0; i < acc.length; i++) {
