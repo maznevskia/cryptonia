@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Wallet
+{% endblock %}
+
+{% block main %}
+    <div id="walletDiv">
+        <table class="wallet-table">
+            <thead>
+                <tr>
+                    <th>Coin</th>
+                    <th>Holdings</th>
+                    <th>Total Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coin in wallet %}
+                <tr>
+                    <td><img src="https://cryptologos.cc/logos/{{ coin['id'] }}-{{ coin['symbol'] | lower }}-logo.png"
+                        alt="" class="coin-image" onerror="this.onerror=null; this.src='/static/cryptoniaLogo.png';"> {{ coin['symbol'] }}</td>
+                    <td>{{ coin['holdings'] }}</td>
+                    <td>${{ '{:,.2f}'.format(coin['total_value']) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

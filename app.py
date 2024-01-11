@@ -26,10 +26,46 @@ def after_request(response):
 
 @app.route('/')
 def home():
-    response = requests.get('https://api.coinlore.net/api/tickers/')
+    response = requests.get('https://api.coincap.io/v2/assets')
     data = response.json()
     coins = data['data'][:5]
     return render_template('index.html', coins=coins)
+
+@app.route("/wallet")
+def wallet():
+    """Display user's wallet"""
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user_id = session["user_id"]
+
+    crypto_names = db.execute("SELECT DISTINCT name FROM transactions WHERE user_id = ?", user_id)
+
+    wallet = []
+    for symbol in crypto_names:
+
+
+        bought_amount = db.execute("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'buy'", user_id, symbol['name'])
+        bought_amount = bought_amount[0]['total'] if bought_amount[0]['total'] else 0
+
+        sold_amount = db.execute("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'sell'", user_id, symbol['name'])
+        sold_amount = sold_amount[0]['total'] if sold_amount[0]['total'] else 0
+
+        current_amount = bought_amount - sold_amount
+
+
+        if current_amount > 0:
+            response = requests.get(f'https://api.coincap.io/v2/assets/{symbol["name"]}')
+            coin_data = response.json()
+            coin = coin_data['data']
+    
+            coin['holdings'] = current_amount
+            coin['total_value'] = current_amount * float(coin['priceUsd'])
+    
+            wallet.append(coin)
+            
+
+    return render_template("wallet.html", wallet=wallet)
 
 
 @app.route("/register", methods=["GET", "POST"])

@@ -17,11 +17,11 @@ Home
     {% for coin in coins %}
         <tr>
             <td>
-                <img src="https://cryptologos.cc/logos/{{ coin['name'] | replace(' ', '-') | lower }}-{{ coin['symbol'] | lower }}-logo.png"
-                 alt="" class="coin-image" onerror="this.onerror=null; this.src='usd-coin-usdc-logo.png';">
+                <img src="https://cryptologos.cc/logos/{{ coin['id'] }}-{{ coin['symbol'] | lower }}-logo.png"
+                 alt="" class="coin-image" onerror="this.onerror=null; this.src='/static/cryptoniaLogo.png';">
                 {{ coin['symbol'] }}</td>
-            <td>${{ '{:,.2f}'.format(coin['price_usd']|float) }}</td>
-            <td><span class="{% if coin['percent_change_24h'] | float > 0 %}change-positive{% elif coin['percent_change_24h'] | float < 0 %}change-negative{% endif %}">{{ coin['percent_change_24h'] }}%</span></td>
+            <td>${{ '{:,.2f}'.format(coin['priceUsd']|float) }}</td>
+            <td><span class="{% if coin['changePercent24Hr'] | float > 0 %}change-positive{% elif coin['changePercent24Hr'] | float < 0 %}change-negative{% endif %}">{{ '{:,.2f}'.format(coin['changePercent24Hr']|float) }}%</span></td>
         </tr>
     {% endfor %}
     </tbody>

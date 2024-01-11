@@ -1,3 +1,7 @@
+* {
+    color: white;
+}
+
 .github:before {
     content: "\f09b";
 }
@@ -32,7 +36,6 @@ main {
     justify-items: center;
     align-items: center;
     background-color: #181a1f;
-    color: white;
     padding: 1rem;
 }
 
@@ -82,7 +85,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     justify-content: space-between;
     align-items: center;
     background-color: #181a1f;
-    color: white;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -123,7 +125,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 
 .active, .accordion:hover {
     background-color: #22262d;
-    color: white;
 }
 
 .accordion:focus {
@@ -132,7 +133,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 
 .panel {
     padding: 0 18px;
-    color: white;
     background-color: #22262d;
     max-height: 0;
     overflow: hidden;
@@ -157,7 +157,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     text-align: left;
 }
 
-.index-table {
+.index-table, .wallet-table {
     border-collapse: separate;
     border-spacing: 0;
     border: 2px solid #efb90b;
@@ -169,14 +169,16 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 }
 
 .index-table th,
-.index-table td {
+.index-table td,
+.wallet-table th,
+.wallet-table td {
     font-size: 1.2rem;
     border-bottom: 2px solid #efb90b;
     padding: 10px;
     text-align: center;
 }
 
-.index-table .coin-image {
+.index-table .coin-image, .wallet-table .coin-image {
     width: 2rem;
     height: auto;
 }
@@ -190,7 +192,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     text-align: right;
 }
 
-.index-table tr:last-child td {
+.index-table tr:last-child td, .wallet-table tr:last-child td {
     border-bottom: none;
 }
 
@@ -221,6 +223,22 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     }
 }
 
+#walletDiv {
+    width: 100%;
+    overflow: auto;
+    min-height: 500px;
+}
+
+.wallet-table {
+    margin: auto;
+    max-width: 800px;
+}
+
+.wallet-table th,
+.wallet-table td {
+    padding: .5rem;
+}
+
 .change-positive {
     color: green;
 }
@@ -234,7 +252,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 }
 
 .form-signup label, .form-signup p, .form-signin label, .form-signin p {
-    color: white;
     padding: 0;
     margin: 0;
 }
@@ -300,7 +317,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 }
 
 footer {
-    color: white;
     background-color: #181a1f;
     position: relative;
     bottom: 0;
@@ -322,7 +338,6 @@ footer p {
 }
 
 .github {
-	color: white;
     font-size: 1.5rem;
     transition: transform 0.3s ease-in-out;
     width: 100%;
