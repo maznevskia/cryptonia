@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Transactions
+{% endblock %}
+
+{% block main %}
+    <div id="transactionsDiv">
+        <table class="transactions-table" id="transactionsTable">
+            <thead>
+                <tr>
+                    <th>Coin</th>
+                    <th>Amount</th>
+                    <th>Total Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr id="transaction-row">
+                        <td>{{ transaction.crypto_symbol }}</td>
+                        <td class="{{ 'transaction-positive' if transaction.transaction_type == 'buy' else 'transaction-negative' }}">
+                            {{ '+' if transaction.transaction_type == 'buy' else '-' }}{{ transaction.amount }}
+                        </td>
+                        <td>{{ "{:.2f}".format(transaction.amount * transaction.purchase_price) }} USD</td>
+                        <td>{{ transaction.transaction_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

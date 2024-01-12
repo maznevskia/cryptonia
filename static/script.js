@@ -61,3 +61,45 @@ setInterval(function() {
             }
         });
 }, 5000);
+
+if (window.location.pathname.endsWith('transactions.html')) {
+    document.body.classList.add('transactions-page');
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    $('#transactionsTable').DataTable({
+        "order": [[ 3, "desc" ]]
+    });
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const updateTransactions = () => {
+        const transactionsTable = document.querySelector('.transactions-table tbody');
+        if (transactionsTable) {
+            fetch('/transactions')
+                .then(response => response.json())
+                .then(transactions => {
+                    transactionsTable.innerHTML = '';
+                    for (const transaction of transactions) {
+                        const row = document.createElement('tr');
+                        const dateCell = document.createElement('td');
+                        dateCell.textContent = transaction.date;
+                        row.appendChild(dateCell);
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = transaction.name;
+                        row.appendChild(nameCell);
+                        const typeCell = document.createElement('td');
+                        typeCell.textContent = transaction.transaction_type;
+                        row.appendChild(typeCell);
+                        const amountCell = document.createElement('td');
+                        amountCell.textContent = (transaction.transaction_type === 'buy' ? '+' : '-') + transaction.amount;
+                        amountCell.className = transaction.transaction_type === 'buy' ? 'transaction-positive' : 'transaction-negative';
+                        row.appendChild(amountCell);
+                        transactionsTable.appendChild(row);
+                    }
+                });
+        }
+    };
+
+    updateTransactions();
+});

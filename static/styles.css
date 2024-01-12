@@ -39,6 +39,10 @@ main {
     padding: 1rem;
 }
 
+body.transactions-page {
+    justify-content: space-between;
+}
+
 @media screen and (max-width: 600px) {
     main {
         grid-template-columns: 1fr;
@@ -98,7 +102,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 .accordion h4 {
     flex: 1;
     text-align: left;
-    padding-right: 2rem; /* Adjust this value to suit your needs */
+    padding-right: 2rem;
 }
 
 .toggle-icon {
@@ -157,7 +161,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     text-align: left;
 }
 
-.index-table, .wallet-table {
+.index-table, .wallet-table, .transactions-table {
     border-collapse: separate;
     border-spacing: 0;
     border: 2px solid #efb90b;
@@ -171,7 +175,9 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 .index-table th,
 .index-table td,
 .wallet-table th,
-.wallet-table td {
+.wallet-table td,
+.transactions-table th,
+.transactions-table td {
     font-size: 1.2rem;
     border-bottom: 2px solid #efb90b;
     padding: 10px;
@@ -192,7 +198,8 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     text-align: right;
 }
 
-.index-table tr:last-child td, .wallet-table tr:last-child td {
+.index-table tr:last-child td, .wallet-table tr:last-child td,
+.transactions-table tr:last-child td {
     border-bottom: none;
 }
 
@@ -223,20 +230,60 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     }
 }
 
-#walletDiv {
+#walletDiv, #transactionsDiv {
     width: 100%;
     overflow: auto;
     min-height: 500px;
 }
 
-.wallet-table {
+.wallet-table, .transactions-table {
     margin: auto;
     max-width: 800px;
 }
 
 .wallet-table th,
-.wallet-table td {
+.wallet-table td,
+.transactions-table th,
+.transactions-table td {
     padding: .5rem;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+    color: white;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active,
+.dataTables_empty {
+    color: white !important;
+    background: none;
+    background-color: #1e2329 !important;
+}
+
+#transactionsTable {
+    border-bottom: 2px solid #efb90b;
+}
+
+#transaction-row {
+    color: white;
+    background-color: #22262d;
+}
+
+.transaction-positive {
+    color: rgb(90, 255, 90);
+}
+
+.transaction-negative {
+    color: rgb(255, 50, 50);
 }
 
 .change-positive {
@@ -251,7 +298,8 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     margin-top: 3rem;
 }
 
-.form-signup label, .form-signup p, .form-signin label, .form-signin p {
+.form-signup label, .form-signup p,
+.form-signin label, .form-signin p {
     padding: 0;
     margin: 0;
 }
@@ -268,7 +316,8 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     z-index: 2;
 }
 
-.form-signup input[type="email"], .form-signup input[type="password"], .form-signin input[type="email"], .form-signin input[type="password"] {
+.form-signup input[type="email"], .form-signup input[type="password"],
+.form-signin input[type="email"], .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;

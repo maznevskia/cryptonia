@@ -67,6 +67,18 @@ def wallet():
 
     return render_template("wallet.html", wallet=wallet)
 
+@app.route("/transactions")
+def transactions():
+    """Display user's transactions"""
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    user_id = session["user_id"]
+
+    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date DESC", user_id)
+
+    return render_template("transactions.html", transactions=transactions)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
