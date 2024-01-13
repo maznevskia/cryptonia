@@ -236,6 +236,12 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     min-height: 500px;
 }
 
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
 .wallet-table, .transactions-table {
     margin: auto;
     max-width: 800px;
