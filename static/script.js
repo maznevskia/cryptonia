@@ -72,6 +72,44 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+$(document).ready(function() {
+    $('#marketsTable').DataTable();
+});
+
+function formatNumber(num) {
+    if (num >= 1.0e+12) {
+        return (num / 1.0e+12).toFixed(2) + "T";
+    } else if (num >= 1.0e+9) {
+        return (num / 1.0e+9).toFixed(2) + "B";
+    } else if (num >= 1.0e+6) {
+        return (num / 1.0e+6).toFixed(2) + "M";
+    } else if (num >= 1.0e+3) {
+        return (num / 1.0e+3).toFixed(2) + "K";
+    } else {
+        return num.toFixed(2);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    $('#marketsTable').DataTable({
+        "order": [[ 4, "desc" ]],
+        "columnDefs": [
+            {
+                "targets": [3, 4],
+                "render": function(data, type, row) {
+                    var cleanData = data.replace(/[^0-9.]/g, '');
+                    var numberData = parseFloat(cleanData);
+                    if (type === 'display') {
+                        return formatNumber(numberData);
+                    } else {
+                        return numberData;
+                    }
+                }
+            }
+        ]
+    });
+});
+
 document.addEventListener('DOMContentLoaded', (event) => {
     const updateTransactions = () => {
         const transactionsTable = document.querySelector('.transactions-table tbody');

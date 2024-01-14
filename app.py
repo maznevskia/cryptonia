@@ -31,6 +31,12 @@ def home():
     coins = data['data'][:5]
     return render_template('index.html', coins=coins)
 
+@app.route('/markets')
+def markets():
+    response = requests.get('https://api.coincap.io/v2/assets?limit=200')
+    data = response.json()
+    return render_template('markets.html', coins=data['data'])
+
 @app.route("/wallet")
 def wallet():
     """Display user's wallet"""

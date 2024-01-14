@@ -184,7 +184,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     text-align: center;
 }
 
-.index-table .coin-image, .wallet-table .coin-image {
+.index-table .coin-image, .wallet-table .coin-image, .markets-table .coin-image {
     width: 2rem;
     height: auto;
 }
@@ -230,10 +230,20 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     }
 }
 
-#walletDiv, #transactionsDiv {
+#walletDiv, #transactionsDiv, #marketsDiv {
     width: 100%;
     overflow: auto;
     min-height: 500px;
+}
+
+.markets-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #1e2329;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 800px;
 }
 
 .center-button {
@@ -242,7 +252,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     margin-bottom: 20px;
 }
 
-.wallet-table, .transactions-table {
+.wallet-table, .transactions-table, .markets-table {
     margin: auto;
     max-width: 800px;
 }
@@ -250,7 +260,9 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 .wallet-table th,
 .wallet-table td,
 .transactions-table th,
-.transactions-table td {
+.transactions-table td,
+.markets-table th,
+.markets-table td {
     padding: .5rem;
 }
 
@@ -279,7 +291,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     border-bottom: 2px solid #efb90b;
 }
 
-#transaction-row {
+#transaction-row, #market-row {
     color: white;
     background-color: #22262d;
 }
