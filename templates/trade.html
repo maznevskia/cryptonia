@@ -19,7 +19,7 @@ Trade
                     <option class="trade-text" value="{{ coin['id'] }}">{{ coin['name'] }}</option>
                     {% endfor %}
                 </select>
-                <div id="coin-price" class="trade-text">Current Price: </div>
+                <div id="coin-price" class="trade-text"></div>
             </div>
             <div>
                 <div id="cash-holdings" class="trade-text">Cash: ${{ "%.2f"|format(cash[0].cash) }}</div>
