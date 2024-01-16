@@ -11,7 +11,7 @@ Transactions
                 <tr>
                     <th>Coin</th>
                     <th>Amount</th>
-                    <th>Total Amount</th>
+                    <th>Purchase Price</th>
                     <th>Date</th>
                 </tr>
             </thead>
@@ -20,9 +20,9 @@ Transactions
                     <tr id="transaction-row">
                         <td>{{ transaction.crypto_symbol }}</td>
                         <td class="{{ 'transaction-positive' if transaction.transaction_type == 'buy' else 'transaction-negative' }}">
-                            {{ '+' if transaction.transaction_type == 'buy' else '-' }}{{ transaction.amount }}
+                            {{ '+' if transaction.transaction_type == 'buy' }}{{ transaction.amount }}
                         </td>
-                        <td>{{ "{:.2f}".format(transaction.amount * transaction.purchase_price) }} USD</td>
+                        <td>${{ transaction.purchase_price }}</td>
                         <td>{{ transaction.transaction_date }}</td>
                     </tr>
                 {% endfor %}

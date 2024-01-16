@@ -110,7 +110,231 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+function toFixedTruncate(num) {
+    let fixed = num >= 1 ? 2 : 8;
+    let [whole, decimal] = num.toString().split('.');
+    decimal = decimal || '';
+    if (decimal.length > fixed) {
+        decimal = decimal.substring(0, fixed);
+    }
+    return parseFloat(`${whole}.${decimal}`);
+}
+
+if (window.location.pathname.endsWith('trade')) {
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const buyBtn = document.getElementById('buy-btn');
+        const sellBtn = document.getElementById('sell-btn');
+        const coinPriceDiv = document.getElementById('coin-price');
+        const cashInput = document.getElementById('cash-input');
+        const coinAmountDiv = document.getElementById('coin-amount');
+        const actionBtn = document.getElementById('action-btn');
+
+        let coinId, coinSymbol;
+        let currentPrice = 0;
+
+        $(document).ready(function() {
+            $('#coin-select').select2();
+        });
+
+        cashInput.disabled = true;
+        coinAmountDiv.disabled = true;
+
+        $('#coin-select').on('select2:select', async (e) => {
+            coinId = e.params.data.id;
+            currentPrice = e.params.data.price;
+            const response = await fetch(`https://api.coincap.io/v2/assets/${coinId}`);
+            const data = await response.json();
+            coinSymbol = data.data.symbol;
+            currentPrice = parseFloat(toFixedTruncate(data.data.priceUsd, 8));
+            coinPriceDiv.textContent = `Current Price: ${toFixedTruncate(currentPrice)}`;
+
+            const response2 = await fetch(`/get_coin_amount?coin_id=${coinId}`);
+            const data2 = await response2.json();
+            const coinAmount = data2.coin_amount;
+
+            const leftAmountDiv = document.querySelector('#coin-holdings');
+            let formattedCoinAmount = Math.abs(coinAmount) < 0.0000005 ? 0.000000 : parseFloat(coinAmount).toFixed(6);
+            leftAmountDiv.textContent = `You have ${formattedCoinAmount} ${coinSymbol}`;
+
+            cashInput.disabled = false;
+            coinAmountDiv.disabled = false;
+
+            cashInput.value = '';
+            coinAmountDiv.value = '';
+        });
+
+        let errorMessageDiv = document.getElementById('error-message');
+
+        cashInput.addEventListener('input', () => {
+            if (cashInput.value === '') {
+                coinAmountDiv.value = '';
+                errorMessageDiv.textContent = '';
+                return;
+            }
+
+            const cash = parseFloat(cashInput.value);
+            if (cash < 1) {
+                errorMessageDiv.textContent = "Value must be at least $1";
+                return;
+            }
+
+            const coinAmount = cash / currentPrice;
+            coinAmountDiv.value = Number(coinAmount).toFixed(6);
+            errorMessageDiv.textContent = '';
+        });
+
+        coinAmountDiv.addEventListener('input', () => {
+            if (coinAmountDiv.value === '') {
+                cashInput.value = '';
+                return;
+            }
+
+            const coinAmount = parseFloat(coinAmountDiv.value);
+            const cash = coinAmount * currentPrice;
+            cashInput.value = `${toFixedTruncate(cash)}`;
+
+            if (cash < 1) {
+                errorMessageDiv.textContent = "Value must be at least $1";
+                return;
+            }
+
+            errorMessageDiv.textContent = '';
+        });
+
+        buyBtn.addEventListener('click', () => {
+            const sellPrimaryElements = document.querySelectorAll('.sell-primary');
+            const sellPrimaryTextElements = document.querySelectorAll('.sell-primary-text');
+            const sellSecondaryElements = document.querySelectorAll('.sell-secondary');
+            const sellButtonElements = document.querySelectorAll('.sell-button');
+
+            sellPrimaryElements.forEach(element => {
+                if (element.classList.contains('sell-primary')) {
+                    element.classList.remove('sell-primary');
+                    element.classList.add('buy-primary');
+                }
+            });
+
+            sellPrimaryTextElements.forEach(element => {
+                if (element.classList.contains('sell-primary-text')) {
+                    element.classList.remove('sell-primary-text');
+                    element.classList.add('buy-primary-text');
+                }
+            });
+
+            sellSecondaryElements.forEach(element => {
+                if (element.classList.contains('sell-secondary')) {
+                    element.classList.remove('sell-secondary');
+                    element.classList.add('buy-secondary');
+                }
+            });
+
+            sellButtonElements.forEach(element => {
+                if (element.classList.contains('sell-button')) {
+                    element.classList.remove('sell-button');
+                    element.classList.add('buy-button');
+                }
+            });
+
+            actionBtn.textContent = 'Buy';
+        });
+
+        sellBtn.addEventListener('click', async () => {
+            const buyPrimaryElements = document.querySelectorAll('.buy-primary');
+            const buyPrimaryTextElements = document.querySelectorAll('.buy-primary-text');
+            const buySecondaryElements = document.querySelectorAll('.buy-secondary');
+            const buyButtonElements = document.querySelectorAll('.buy-button');
+
+            buyPrimaryElements.forEach(element => {
+                if (element.classList.contains('buy-primary')) {
+                    element.classList.remove('buy-primary');
+                    element.classList.add('sell-primary');
+                }
+            });
+
+            buyPrimaryTextElements.forEach(element => {
+                if (element.classList.contains('buy-primary-text')) {
+                    element.classList.remove('buy-primary-text');
+                    element.classList.add('sell-primary-text');
+                }
+            });
+
+            buySecondaryElements.forEach(element => {
+                if (element.classList.contains('buy-secondary')) {
+                    element.classList.remove('buy-secondary');
+                    element.classList.add('sell-secondary');
+                }
+            });
+
+            buyButtonElements.forEach(element => {
+                if (element.classList.contains('buy-button')) {
+                    element.classList.remove('buy-button');
+                    element.classList.add('sell-button');
+                }
+            });
+
+            const buyButton = document.querySelector('.buy-button');
+            if (buyButton) {
+                buyButton.textContent = 'Sell';
+                buyButton.classList.remove('buy-button');
+                buyButton.classList.add('sell-button');
+            }
+
+            actionBtn.textContent = 'Sell';
+        });
+
+        actionBtn.addEventListener('click', () => {
+            if (cashInput.value < 1) {
+                return;
+            }
+            
+            const cash = cashInput.value;
+            const coinAmount = coinAmountDiv.value;
+            const isBuy = actionBtn.classList.contains('buy-button');
+
+            const trade = {
+                coinName: coinId.toLowerCase(),
+                coinSymbol: coinSymbol,
+                currentPrice: currentPrice,
+                cash: cash,
+                coinAmount: coinAmount,
+                isBuy: isBuy
+            };
+
+            fetch('/trade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(trade)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/wallet';
+                } else {
+                    alert('Trade failed: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        });
+    });
+}
+
+
 document.addEventListener('DOMContentLoaded', (event) => {
+    if (window.location.pathname.endsWith('trade')) {
+        setInterval(() => {
+            const selectElement = document.querySelector('.select2');
+            if (selectElement) {
+                selectElement.classList.add('buy-primary');
+            }
+        }, 10);
+    }
+    
     const updateTransactions = () => {
         const transactionsTable = document.querySelector('.transactions-table tbody');
         if (transactionsTable) {

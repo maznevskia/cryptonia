@@ -1,9 +1,10 @@
 import re
 import requests
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from decimal import Decimal, ROUND_DOWN
 
 app = Flask(__name__)
 
@@ -37,6 +38,70 @@ def markets():
     data = response.json()
     return render_template('markets.html', coins=data['data'])
 
+@app.route('/trade', methods=['GET', 'POST'])
+def trade():
+    """Trade cryptocurrencies"""
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session["user_id"]
+
+    cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)
+
+    if request.method == 'POST':
+        trade = request.get_json()
+
+        if not trade:
+            return jsonify({'success': False, 'error': 'No trade data provided'}), 400
+        if 'coinName' not in trade:
+            return jsonify({'success': False, 'error': 'Missing coinName in trade data'}), 400
+        if 'cash' not in trade:
+            return jsonify({'success': False, 'error': 'Missing cash in trade data'}), 400
+        if 'coinAmount' not in trade:
+            return jsonify({'success': False, 'error': 'Missing coinAmount in trade data'}), 400
+        if 'isBuy' not in trade:
+            return jsonify({'success': False, 'error': 'Missing isBuy in trade data'}), 400
+
+        if trade['isBuy']:
+            if round(float(cash[0]['cash']), 2) < float(trade['cash']):
+                return jsonify({'success': False, 'error': 'Insufficient cash'}), 400
+
+            db.execute("INSERT INTO transactions (user_id, name, crypto_symbol, amount, transaction_type, purchase_price, transaction_date) VALUES (?, ?, ?, ?, ?, ?, datetime('now'))", user_id, trade['coinName'], trade['coinSymbol'], int(float(trade['coinAmount']) * 10**6) / 10**6, 'buy', trade['currentPrice'])
+            db.execute("UPDATE users SET cash = cash - ? WHERE id = ?", int(float(trade['cash']) * 10**2) / 10**2, user_id)
+        else:
+            transactions = db.execute("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ?", user_id, trade['coinName'])
+            if not transactions or round(transactions[0]['total'], 6) < float(trade['coinAmount']):
+                return jsonify({'success': False, 'error': 'Insufficient coins'}), 400
+
+            db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", int(float(trade['cash']) * 10**2) / 10**2, user_id)
+            db.execute("INSERT INTO transactions (user_id, name, crypto_symbol, amount, transaction_type, purchase_price, transaction_date) VALUES (?, ?, ?, ?, ?, ?, datetime('now'))", user_id, trade['coinName'], trade['coinSymbol'], -1 * int(float(trade['coinAmount']) * 10**6) / 10**6, 'sell', trade['currentPrice'])
+
+        return jsonify({'success': True}), 200
+    else:
+        response = requests.get('https://api.coincap.io/v2/assets?limit=200')
+        coins = response.json()['data']
+
+        return render_template('trade.html', coins=coins, cash=cash)
+
+@app.route('/get_coin_amount', methods=['GET'])
+def get_coin_amount():
+    coin_id = request.args.get('coin_id')
+    user_id = session["user_id"]
+
+    if not coin_id:
+        return jsonify({'error': 'Missing coin_id'}), 400
+
+    if not user_id:
+        return jsonify({'error': 'Missing user_id'}), 400
+
+    rows = db.execute(
+        'SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ?',
+        user_id, coin_id,)
+    row = rows[0] if rows else None
+    coin_amount = row['total'] if row['total'] else 0
+
+    return jsonify({'coin_amount': coin_amount})
+
 @app.route("/wallet")
 def wallet():
     """Display user's wallet"""
@@ -51,23 +116,29 @@ def wallet():
     for symbol in crypto_names:
 
 
-        bought_amount = db.execute("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'buy'", user_id, symbol['name'])
+        bought_amount = db.execute("SELECT ROUND(SUM(amount), 6) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'buy'", user_id, symbol['name'])
         bought_amount = bought_amount[0]['total'] if bought_amount[0]['total'] else 0
 
-        sold_amount = db.execute("SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'sell'", user_id, symbol['name'])
+        sold_amount = db.execute("SELECT ROUND(SUM(amount), 6) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'sell'", user_id, symbol['name'])
         sold_amount = sold_amount[0]['total'] if sold_amount[0]['total'] else 0
 
-        current_amount = bought_amount - sold_amount
+        bought_amount_decimal = Decimal(str(bought_amount)).quantize(Decimal('0.000001'), rounding=ROUND_DOWN)
+        sold_amount_decimal = Decimal(str(sold_amount)).quantize(Decimal('0.000001'), rounding=ROUND_DOWN)
 
-
+        current_amount_decimal = bought_amount_decimal + sold_amount_decimal
+        current_amount = float(current_amount_decimal)
+        
         if current_amount > 0:
             response = requests.get(f'https://api.coincap.io/v2/assets/{symbol["name"]}')
             coin_data = response.json()
             coin = coin_data['data']
-    
+
             coin['holdings'] = current_amount
-            coin['total_value'] = current_amount * float(coin['priceUsd'])
-    
+            current_amount_decimal = Decimal(str(current_amount))
+            price_decimal = Decimal(str(coin['priceUsd']))
+            total_value_decimal = current_amount_decimal * price_decimal
+            coin['total_value'] = float(total_value_decimal)
+
             wallet.append(coin)
             
 

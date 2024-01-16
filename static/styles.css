@@ -246,6 +246,168 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     max-width: 800px;
 }
 
+.trade-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 500px;
+    margin: 0;
+    font-size: 2rem;
+    min-width: 600px;
+}
+
+@media (max-width: 600px) {
+    .trade-container {
+        min-width: 100%;
+        font-size: 1rem;
+    }
+    .trade-details {
+        font-size: 1.5rem;
+    }
+}
+
+.trade-option {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 0;
+    margin-bottom: .2rem;
+}
+
+.trade-btn {
+    padding: 10px;
+    width: 49%;
+    border-radius: 10px;
+}
+
+.trade-section {
+    padding: 20px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.trade-details {
+    min-height: 400px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#coin-select, #cash-input, #coin-amount {
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+#buy-btn {
+    background-color: rgb(205, 255, 130);
+    border: 2px solid rgb(140, 230, 0);
+    color: black;
+}
+
+#buy-btn, .buy-button {
+    transition: background-color 0.3s ease;
+}
+
+#buy-btn:hover, .buy-button:hover {
+    background-color: rgb(140, 230, 0);
+    border: 2px solid rgb(140, 230, 0);
+}
+
+.buy-primary {
+    color: white;
+    border: 2px solid rgb(140, 230, 0);
+    background-color: #1e2329;
+    padding: 10px;
+}
+
+.buy-primary-text {
+    color: white;
+}
+
+.buy-secondary {
+    border: 2px solid rgb(140, 230, 0);
+    border-radius: 10px;
+}
+
+.buy-button {
+    padding: 10px;
+    width: 100%;
+    color: black;
+    background-color: rgb(205, 255, 130);
+    border: 2px solid rgb(140, 230, 0);
+    border-radius: 10px;
+}
+
+#sell-btn {
+    background-color: rgb(255, 110, 110);
+    border: 2px solid rgb(255, 35, 0);
+    color: black;
+}
+
+#sell-btn, .sell-button {
+    transition: background-color 0.3s ease;
+}
+
+#sell-btn:hover, .sell-button:hover {
+    background-color: rgb(255, 35, 0);
+    border: 2px solid rgb(255, 35, 0);
+}
+
+.sell-primary {
+    color: white;
+    border: 2px solid rgb(255, 35, 0) !important;
+    background-color: #1e2329;
+    padding: 10px;
+}
+
+.sell-primary-text {
+    color: white;
+}
+
+.sell-secondary {
+    background-color: #1e2329;
+    border: 2px solid rgb(255, 35, 0);
+    border-radius: 10px;
+}
+
+.sell-button {
+    padding: 10px;
+    width: 100%;
+    color: black;
+    background-color: rgb(255, 110, 110);
+    border: 2px solid rgb(255, 35, 0);
+    border-radius: 10px;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #1e2329;
+    color: white;
+    border: none;
+}
+
+.select2-dropdown {
+    background-color: #1e2329;
+    border: 1px solid #1e2329;
+}
+
+.select2-results__option {
+    color: white;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: white;
+}
+
+.select2-search__field {
+    background-color: #1e2329;
+}
+
+element.style {
+    width: 100%;
+}
+
 .center-button {
     display: flex;
     justify-content: center;
@@ -413,4 +575,15 @@ footer p {
   
 .github:hover {
     transform: rotate(360deg) scale(1.2);
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
