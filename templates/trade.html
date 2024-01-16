@@ -10,25 +10,25 @@ Trade
         <button id="buy-btn" class="trade-btn">Buy</button>
         <button id="sell-btn" class="trade-btn">Sell</button>
     </div>
-    <div class="trade-section buy-secondary">
+    <div class="trade-section gold-border">
         <div class="trade-details">
             <div>
-                <select id="coin-select" class="buy-primary">
-                    <option value="" class="buy-primary-text" disabled selected>Select a coin</option>
+                <select id="coin-select" class="trade-primary">
+                    <option value="" class="trade-text" disabled selected>Select a coin</option>
                     {% for coin in coins %}
-                    <option class="buy-primary-text" value="{{ coin['id'] }}">{{ coin['name'] }}</option>
+                    <option class="trade-text" value="{{ coin['id'] }}">{{ coin['name'] }}</option>
                     {% endfor %}
                 </select>
-                <div id="coin-price" class="buy-primary-text">Current Price: </div>
+                <div id="coin-price" class="trade-text">Current Price: </div>
             </div>
             <div>
-                <div id="cash-holdings" class="buy-primary-text">Cash: ${{ "%.2f"|format(cash[0].cash) }}</div>
-                <div id="coin-holdings" class="buy-primary-text"></div>
+                <div id="cash-holdings" class="trade-text">Cash: ${{ "%.2f"|format(cash[0].cash) }}</div>
+                <div id="coin-holdings" class="trade-text"></div>
             </div>
             <div>
                 <h3 id="error-message"></h3>
-                <input type="number" id="cash-input" placeholder="Enter cash amount" class="buy-primary">
-                <input type="number" id="coin-amount" placeholder="Enter coin amount" class="buy-primary">
+                <input type="number" id="cash-input" placeholder="Enter cash amount" class="trade-primary">
+                <input type="number" id="coin-amount" placeholder="Enter coin amount" class="trade-primary">
             </div>
             <button id="action-btn" class="buy-button">Buy</button>
         </div>

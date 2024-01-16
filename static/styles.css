@@ -21,11 +21,14 @@
     color: white !important;
 }
 
+body, main {
+    background-color: #181a1f;
+}
+
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #181a1f;
 }
 
 main {
@@ -35,7 +38,6 @@ main {
     grid-gap: 20px;
     justify-items: center;
     align-items: center;
-    background-color: #181a1f;
     padding: 1rem;
 }
 
@@ -164,7 +166,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 .index-table, .wallet-table, .transactions-table {
     border-collapse: separate;
     border-spacing: 0;
-    border: 2px solid #efb90b;
+    border: 2px solid #efb90b !important;
     background-color: #1e2329;
     border-radius: 10px;
     overflow: hidden;
@@ -272,7 +274,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     justify-content: space-between;
     width: 100%;
     border-bottom: 0;
-    margin-bottom: .2rem;
+    margin-bottom: .5rem;
 }
 
 .trade-btn {
@@ -295,90 +297,44 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     gap: 20px;
 }
 
+.gold-border {
+    border: 2px solid #efb90b;
+    border-radius: 10px;
+}
+
 #coin-select, #cash-input, #coin-amount {
     margin-bottom: 5px;
     width: 100%;
 }
 
-#buy-btn {
-    background-color: rgb(205, 255, 130);
-    border: 2px solid rgb(140, 230, 0);
-    color: black;
+.trade-primary {
+    color: white;
+    border: 2px solid #efb90b;
+    background-color: #1e2329;
+    padding: 10px;
 }
 
-#buy-btn, .buy-button {
-    transition: background-color 0.3s ease;
+.trade-text {
+    color: white;
+}
+
+#buy-btn, #sell-btn, .buy-button, .sell-button {
+    background-color: #1e2329;
+    border: 2px solid #efb90b;
 }
 
 #buy-btn:hover, .buy-button:hover {
-    background-color: rgb(140, 230, 0);
     border: 2px solid rgb(140, 230, 0);
 }
 
-.buy-primary {
-    color: white;
-    border: 2px solid rgb(140, 230, 0);
-    background-color: #1e2329;
-    padding: 10px;
-}
-
-.buy-primary-text {
-    color: white;
-}
-
-.buy-secondary {
-    border: 2px solid rgb(140, 230, 0);
-    border-radius: 10px;
-}
-
-.buy-button {
+.buy-button, .sell-button {
     padding: 10px;
     width: 100%;
-    color: black;
-    background-color: rgb(205, 255, 130);
-    border: 2px solid rgb(140, 230, 0);
     border-radius: 10px;
-}
-
-#sell-btn {
-    background-color: rgb(255, 110, 110);
-    border: 2px solid rgb(255, 35, 0);
-    color: black;
-}
-
-#sell-btn, .sell-button {
-    transition: background-color 0.3s ease;
 }
 
 #sell-btn:hover, .sell-button:hover {
-    background-color: rgb(255, 35, 0);
     border: 2px solid rgb(255, 35, 0);
-}
-
-.sell-primary {
-    color: white;
-    border: 2px solid rgb(255, 35, 0) !important;
-    background-color: #1e2329;
-    padding: 10px;
-}
-
-.sell-primary-text {
-    color: white;
-}
-
-.sell-secondary {
-    background-color: #1e2329;
-    border: 2px solid rgb(255, 35, 0);
-    border-radius: 10px;
-}
-
-.sell-button {
-    padding: 10px;
-    width: 100%;
-    color: black;
-    background-color: rgb(255, 110, 110);
-    border: 2px solid rgb(255, 35, 0);
-    border-radius: 10px;
 }
 
 .select2-container--default .select2-selection--single {
@@ -451,10 +407,6 @@ element.style {
     color: white !important;
     background: none;
     background-color: #1e2329 !important;
-}
-
-#transactionsTable {
-    border-bottom: 2px solid #efb90b;
 }
 
 #transaction-row, #market-row {

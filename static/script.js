@@ -203,31 +203,7 @@ if (window.location.pathname.endsWith('trade')) {
         });
 
         buyBtn.addEventListener('click', () => {
-            const sellPrimaryElements = document.querySelectorAll('.sell-primary');
-            const sellPrimaryTextElements = document.querySelectorAll('.sell-primary-text');
-            const sellSecondaryElements = document.querySelectorAll('.sell-secondary');
             const sellButtonElements = document.querySelectorAll('.sell-button');
-
-            sellPrimaryElements.forEach(element => {
-                if (element.classList.contains('sell-primary')) {
-                    element.classList.remove('sell-primary');
-                    element.classList.add('buy-primary');
-                }
-            });
-
-            sellPrimaryTextElements.forEach(element => {
-                if (element.classList.contains('sell-primary-text')) {
-                    element.classList.remove('sell-primary-text');
-                    element.classList.add('buy-primary-text');
-                }
-            });
-
-            sellSecondaryElements.forEach(element => {
-                if (element.classList.contains('sell-secondary')) {
-                    element.classList.remove('sell-secondary');
-                    element.classList.add('buy-secondary');
-                }
-            });
 
             sellButtonElements.forEach(element => {
                 if (element.classList.contains('sell-button')) {
@@ -240,31 +216,7 @@ if (window.location.pathname.endsWith('trade')) {
         });
 
         sellBtn.addEventListener('click', async () => {
-            const buyPrimaryElements = document.querySelectorAll('.buy-primary');
-            const buyPrimaryTextElements = document.querySelectorAll('.buy-primary-text');
-            const buySecondaryElements = document.querySelectorAll('.buy-secondary');
             const buyButtonElements = document.querySelectorAll('.buy-button');
-
-            buyPrimaryElements.forEach(element => {
-                if (element.classList.contains('buy-primary')) {
-                    element.classList.remove('buy-primary');
-                    element.classList.add('sell-primary');
-                }
-            });
-
-            buyPrimaryTextElements.forEach(element => {
-                if (element.classList.contains('buy-primary-text')) {
-                    element.classList.remove('buy-primary-text');
-                    element.classList.add('sell-primary-text');
-                }
-            });
-
-            buySecondaryElements.forEach(element => {
-                if (element.classList.contains('buy-secondary')) {
-                    element.classList.remove('buy-secondary');
-                    element.classList.add('sell-secondary');
-                }
-            });
 
             buyButtonElements.forEach(element => {
                 if (element.classList.contains('buy-button')) {
@@ -330,7 +282,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         setInterval(() => {
             const selectElement = document.querySelector('.select2');
             if (selectElement) {
-                selectElement.classList.add('buy-primary');
+                selectElement.classList.add('trade-primary');
             }
         }, 10);
     }
