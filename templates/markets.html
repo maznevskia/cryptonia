@@ -14,20 +14,18 @@ Markets
                     <th>24h Change</th>
                     <th>24h Volume</th>
                     <th>Market Cap</th>
-                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for coin in coins %}
-                <tr id="market-row">
+                <tr class="market-row" id="market-row">
                     <td><img src="https://cryptologos.cc/logos/{{ coin['id'] }}-{{ coin['symbol'] | lower }}-logo.png"
                     alt="" class="coin-image" onerror="this.onerror=null; this.src='/static/cryptoniaLogo.png';">
-                    {{ coin['symbol'] }}</td>
+                    {{ coin['symbol'] }} <span class="secondary-text">{{ coin['name'] }}</span></td>
                     <td>${{ '{:,.8f}'.format((coin['priceUsd']|float)|default(0, true)).rstrip('0').rstrip('.') if (coin['priceUsd']|float)|default(0, true) < 0.01 else '{:,.2f}'.format((coin['priceUsd']|float)|default(0, true)) }}</td>
-                    <td><span class="{% if coin['changePercent24Hr'] | float > 0 %}change-positive{% elif coin['changePercent24Hr'] | float < 0 %}change-negative{% endif %}">{{ '{:,.2f}'.format(coin['changePercent24Hr']|float) }}%</span></td>
+                    <td><span class="{% if coin['changePercent24Hr'] | float > 0 %}positive{% elif coin['changePercent24Hr'] | float < 0 %}negative{% endif %}">{{ '{:,.2f}'.format(coin['changePercent24Hr']|float) }}%</span></td>
                     <td>${{ '{:,.2f}'.format(coin['volumeUsd24Hr']|float) }}</td>
                     <td>${{ coin['marketCapUsd'] }}</td>
-                    <td><a href="/trade" class="btn btn-dark" role="button">Trade</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

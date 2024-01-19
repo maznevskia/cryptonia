@@ -6,7 +6,7 @@ Home
 
 {% block main %}
 <div class="index-header">
-    <h1>Welcome to CRYPTONIA</h1>
+    <h1>Welcome to <strong class="gold-text">CRYPTONIA</strong></h1>
     <p>Unlock the Future of Finance with CRYPTONIA</p>
     <p>Are you ready to embark on a journey into the world of digital currency? Look no further!</p>
     <p>CRYPTONIA is your gateway to the exciting realm of cryptocurrencies. Whether you're a seasoned investor or just starting, our platform offers a user-friendly and secure environment to explore, invest, and thrive in the crypto space.</p>
@@ -21,7 +21,7 @@ Home
                  alt="" class="coin-image" onerror="this.onerror=null; this.src='/static/cryptoniaLogo.png';">
                 {{ coin['symbol'] }}</td>
             <td>${{ '{:,.2f}'.format(coin['priceUsd']|float) }}</td>
-            <td><span class="{% if coin['changePercent24Hr'] | float > 0 %}change-positive{% elif coin['changePercent24Hr'] | float < 0 %}change-negative{% endif %}">{{ '{:,.2f}'.format(coin['changePercent24Hr']|float) }}%</span></td>
+            <td><span class="{% if coin['changePercent24Hr'] | float > 0 %}positive{% elif coin['changePercent24Hr'] | float < 0 %}negative{% endif %}">{{ '{:,.2f}'.format(coin['changePercent24Hr']|float) }}%</span></td>
         </tr>
     {% endfor %}
     </tbody>
@@ -44,23 +44,23 @@ Home
 
     <button class="accordion"><h4>What is a cryptocurrency exchange?</h4><span class="toggle-icon">+</span></button>
     <div class="panel">
-        <p><span id="gold">Cryptocurrency</span> exchanges are digital marketplaces that enable users to buy and sell cryptocurrencies like <span id="gold">Bitcoin</span>, <span id="gold">Ethereum</span>, and <span id="gold">Tether</span>. The Cryptonia exchange is the largest crypto exchange by trade volume.</p>
+        <p><span class="gold-text">Cryptocurrency</span> exchanges are digital marketplaces that enable users to buy and sell cryptocurrencies like <span class="gold-text">Bitcoin</span>, <span class="gold-text">Ethereum</span>, and <span class="gold-text">Tether</span>. The Cryptonia exchange is the largest crypto exchange by trade volume.</p>
     </div>
 
     <button class="accordion"><h4>How to buy Bitcoin and other cryptocurrencies on Cryptonia</h4><span class="toggle-icon">+</span></button>
     <div class="panel">
         <p>Buying crypto on Cryptonia is easy!</p>
         <ul>
-            <li><span id="gold">Sign up</span> for a free account on Cryptonia.</li>
-            <li><span id="gold">Verify</span> your identity.</li>
-            <li><span id="gold">Deposit funds</span> into your account.</li>
-            <li><span id="gold">Buy</span> your favorite cryptocurrencies.</li>
+            <li><span class="gold-text">Sign up</span> for a free account on Cryptonia.</li>
+            <li><span class="gold-text">Verify</span> your identity.</li>
+            <li><span class="gold-text">Deposit funds</span> into your account.</li>
+            <li><span class="gold-text">Buy</span> your favorite cryptocurrencies.</li>
         </ul>
     </div>
 
     <button class="accordion"><h4>Why choose Cryptonia</h4><span class="toggle-icon">+</span></button>
     <div class="panel">
-        <p>Cryptonia is the world's <span id="gold">largest cryptocurrency exchange</span> by trade volume. <span id="gold">Trusted by millions</span> of users worldwide, Cryptonia is the ideal place to <span id="gold">buy, sell, and manage</span> your cryptocurrency portfolio.</p>
+        <p>Cryptonia is the world's <span class="gold-text">largest cryptocurrency exchange</span> by trade volume. <span class="gold-text">Trusted by millions</span> of users worldwide, Cryptonia is the ideal place to <span class="gold-text">buy, sell, and manage</span> your cryptocurrency portfolio.</p>
     </div>
 </div>
 {% endblock %}

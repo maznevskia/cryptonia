@@ -6,6 +6,13 @@
     content: "\f09b";
 }
 
+ul {
+    padding-left: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+}
+
 .nav-container {
     display: flex;
     align-items: center;
@@ -41,16 +48,6 @@ main {
     padding: 1rem;
 }
 
-body.transactions-page {
-    justify-content: space-between;
-}
-
-@media screen and (max-width: 600px) {
-    main {
-        grid-template-columns: 1fr;
-    }
-}
-
 a {
     text-decoration: none;
 }
@@ -61,7 +58,6 @@ a:hover {
 }
 
 main > div {
-    margin: 10px;
     padding: 1rem;
     box-sizing: border-box;
 }
@@ -74,6 +70,10 @@ main > div:only-of-type {
 main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     grid-column: 1 / -1;
     justify-self: center;
+}
+
+.index-header p {
+    font-size: 1.2rem;
 }
 
 .faq {
@@ -124,13 +124,15 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 }
 
 .accordion:hover .toggle-icon,
-.accordion.active .toggle-icon {
+.accordion.active .toggle-icon,
+.active, .accordion:hover,
+.panel, #transaction-row, #market-row{
     background-color: #22262d;
-    color: #efb90b;
 }
 
-.active, .accordion:hover {
-    background-color: #22262d;
+.accordion:hover .toggle-icon,
+.accordion.active .toggle-icon {
+    color: #efb90b;
 }
 
 .accordion:focus {
@@ -139,14 +141,14 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 
 .panel {
     padding: 0 18px;
-    background-color: #22262d;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
 }
 
-.panel p {
-    margin: .5rem;
+.panel p, .panel ul {
+    padding: 1rem 0;
+    margin: 0;
 }
 
 .container {
@@ -157,9 +159,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 
 .flashes {
     color: rgb(255, 50, 50);
-    padding: 0;
-    margin-bottom: 1rem;
-    list-style-type: none;
+    padding-bottom: .5rem;
     text-align: left;
 }
 
@@ -184,6 +184,10 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     border-bottom: 2px solid #efb90b;
     padding: 10px;
     text-align: center;
+}
+
+#no-border {
+    border-bottom: none;
 }
 
 .index-table .coin-image, .wallet-table .coin-image, .markets-table .coin-image {
@@ -218,18 +222,7 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-decoration: none;
     color: white;
-}
-
-@media (min-width: 600px) {
-    body {
-        justify-content: flex-end;
-    }
-
-    .show-all-coins {
-        width: 100%;
-    }
 }
 
 #walletDiv, #transactionsDiv, #marketsDiv {
@@ -248,6 +241,14 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     max-width: 800px;
 }
 
+.market-row {
+    cursor: pointer;
+}
+
+.secondary-text {
+    color: #696969;
+}
+
 .trade-container {
     display: flex;
     justify-content: center;
@@ -257,16 +258,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     margin: 0;
     font-size: 2rem;
     min-width: 600px;
-}
-
-@media (max-width: 600px) {
-    .trade-container {
-        min-width: 100%;
-        font-size: 1rem;
-    }
-    .trade-details {
-        font-size: 1.5rem;
-    }
 }
 
 .trade-option {
@@ -314,10 +305,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     padding: 10px;
 }
 
-.trade-text {
-    color: white;
-}
-
 #buy-btn, #sell-btn, .buy-button, .sell-button {
     background-color: #1e2329;
     border: 2px solid #efb90b;
@@ -339,7 +326,6 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
 
 .select2-container--default .select2-selection--single {
     background-color: #1e2329;
-    color: white;
     border: none;
 }
 
@@ -348,11 +334,14 @@ main > div:nth-child(odd):nth-last-child(1):not(:only-of-type) {
     border: 1px solid #1e2329;
 }
 
-.select2-results__option {
-    color: white;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
+.select2-results__option,
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--single .select2-selection__rendered,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
     color: white;
 }
 
@@ -388,14 +377,6 @@ element.style {
     background-color: #1e2329;
 }
 
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter,
-.dataTables_wrapper .dataTables_info,
-.dataTables_wrapper .dataTables_processing,
-.dataTables_wrapper .dataTables_paginate {
-    color: white;
-}
-
 .dataTables_wrapper .dataTables_paginate .paginate_button,
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
@@ -411,23 +392,18 @@ element.style {
 
 #transaction-row, #market-row {
     color: white;
-    background-color: #22262d;
 }
 
-.transaction-positive {
+#market-row:hover {
+    background-color: #343a40;
+}
+
+.positive {
     color: rgb(90, 255, 90);
 }
 
-.transaction-negative {
+.negative {
     color: rgb(255, 50, 50);
-}
-
-.change-positive {
-    color: green;
-}
-
-.change-negative {
-    color: red;
 }
 
 .form-signup, .form-signin {
@@ -454,17 +430,11 @@ element.style {
 
 .form-signup input[type="email"], .form-signup input[type="password"],
 .form-signin input[type="email"], .form-signin input[type="password"] {
-    margin-bottom: 10px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+    margin-bottom: 1rem;
 }
 
-#gold {
+.gold-text {
     color: #efb90b;
-}
-
-.form-signup button, .form-signin button {
-    margin: 1rem 0 0 0;
 }
 
 .login, .signup {
@@ -477,28 +447,14 @@ element.style {
     background-color: #efba0bdf;
 }
 
-@media (max-width: 991px) {
-    .register, .login {
-        margin-top: .5rem;
-    }
-}
-  
-@media (min-width: 992px) {
-    .register, .login {
-      margin-left: .5rem;
-      margin-right: .5rem;
-    }
-}
-
-.logout, .register {
-    color: #efb90b;
-    background-color: #181a1f;
-    border: #efb90b solid 1px;
-}
-
+.logout, .register,
 .logout:hover, .register:hover {
     color: #efb90b;
     background-color: #181a1f;
+}
+
+.logout, .register {
+    border: #efb90b solid 1px;
 }
 
 footer {
@@ -542,4 +498,37 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
+}
+
+@media screen and (max-width: 600px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .trade-container {
+        min-width: 100%;
+        font-size: 1rem;
+    }
+    .trade-details {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 600px) {
+    body {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 991px) {
+    #register, #login {
+        margin-top: .5rem;
+    }
+}
+  
+@media (min-width: 992px) {
+    #register, #login {
+      margin-left: .5rem;
+      margin-right: .5rem;
+    }
 }

@@ -1,10 +1,3 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    const copyrightElement = document.getElementById('copyright');
-    if (copyrightElement) {
-        copyrightElement.textContent += ' ' + new Date().getFullYear();
-    }
-});
-
 var acc = document.getElementsByClassName("accordion");
 
 for (var i = 0; i < acc.length; i++) {
@@ -53,7 +46,7 @@ setInterval(function() {
                     const changeCell = document.createElement('td');
                     const changeSpan = document.createElement('span');
                     changeSpan.textContent = `${parseFloat(coin.changePercent24Hr).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
-                    changeSpan.className = coin.changePercent24Hr > 0 ? 'change-positive' : 'change-negative';
+                    changeSpan.className = coin.changePercent24Hr > 0 ? 'positive' : 'negative';
                     changeCell.appendChild(changeSpan);
                     row.appendChild(changeCell);
                     tableBody.appendChild(row);
@@ -62,18 +55,18 @@ setInterval(function() {
         });
 }, 5000);
 
-if (window.location.pathname.endsWith('transactions.html')) {
-    document.body.classList.add('transactions-page');
-}
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    $('#transactionsTable').DataTable({
-        "order": [[ 3, "desc" ]]
-    });
-});
-
 $(document).ready(function() {
     $('#marketsTable').DataTable();
+
+    $(document).on('click', '.market-row', function() {
+        window.location.href = '/trade';
+    });
+
+    if ($('.wallet-table tbody tr').length === 0) {
+        $('th').each(function() {
+            $(this).attr('id', 'no-border');
+        });
+    }
 });
 
 function formatNumber(num) {
@@ -90,26 +83,6 @@ function formatNumber(num) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    $('#marketsTable').DataTable({
-        "order": [[ 4, "desc" ]],
-        "columnDefs": [
-            {
-                "targets": [3, 4],
-                "render": function(data, type, row) {
-                    var cleanData = data.replace(/[^0-9.]/g, '');
-                    var numberData = parseFloat(cleanData);
-                    if (type === 'display') {
-                        return formatNumber(numberData);
-                    } else {
-                        return numberData;
-                    }
-                }
-            }
-        ]
-    });
-});
-
 function toFixedTruncate(num) {
     let fixed = num >= 1 ? 2 : 8;
     let [whole, decimal] = num.toString().split('.');
@@ -117,7 +90,7 @@ function toFixedTruncate(num) {
     if (decimal.length > fixed) {
         decimal = decimal.substring(0, fixed);
     }
-    return parseFloat(`${whole}.${decimal}`);
+    return `${whole}.${decimal}`;
 }
 
 if (window.location.pathname.endsWith('trade')) {
@@ -146,8 +119,8 @@ if (window.location.pathname.endsWith('trade')) {
             const response = await fetch(`https://api.coincap.io/v2/assets/${coinId}`);
             const data = await response.json();
             coinSymbol = data.data.symbol;
-            currentPrice = parseFloat(toFixedTruncate(data.data.priceUsd, 8));
-            coinPriceDiv.textContent = `Current Price: ${toFixedTruncate(currentPrice)}`;
+            currentPrice = toFixedTruncate(data.data.priceUsd);
+            coinPriceDiv.textContent = `Current Price: ${currentPrice}`;
 
             const response2 = await fetch(`/get_coin_amount?coin_id=${coinId}`);
             const data2 = await response2.json();
@@ -180,7 +153,7 @@ if (window.location.pathname.endsWith('trade')) {
             }
 
             const coinAmount = cash / currentPrice;
-            coinAmountDiv.value = Number(coinAmount).toFixed(6);
+            coinAmountDiv.value = Number(toFixedTruncate(coinAmount)).toFixed(6);
             errorMessageDiv.textContent = '';
         });
 
@@ -192,15 +165,24 @@ if (window.location.pathname.endsWith('trade')) {
 
             const coinAmount = parseFloat(coinAmountDiv.value);
             const cash = coinAmount * currentPrice;
-            cashInput.value = `${toFixedTruncate(cash)}`;
+            cashInput.value = `${toFixedTruncate(cash.toFixed(2))}`;
 
-            if (cash < 1) {
+            if (cashInput.value < 1) {
                 errorMessageDiv.textContent = "Value must be at least $1";
                 return;
             }
 
             errorMessageDiv.textContent = '';
         });
+
+        if (coinAmountDiv) {
+            coinAmountDiv.addEventListener('input', function (e) {
+                const value = e.target.value;
+                if (value.includes('.') && value.split('.')[1].length > 6) {
+                    e.target.value = parseFloat(value).toFixed(6);
+                }
+            });
+        }
 
         buyBtn.addEventListener('click', () => {
             const sellButtonElements = document.querySelectorAll('.sell-button');
@@ -274,6 +256,10 @@ if (window.location.pathname.endsWith('trade')) {
 
         });
     });
+
+    document.getElementById('cash-input').oninvalid = function() {
+        this.setCustomValidity('');
+    };
 }
 
 
@@ -286,6 +272,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         }, 10);
     }
+
+    $('#transactionsTable').DataTable({
+        "order": [[ 3, "desc" ]]
+    });
+
+    $('#marketsTable').DataTable({
+        "order": [[ 4, "desc" ]],
+        "columnDefs": [
+            {
+                "targets": [3, 4],
+                "render": function(data, type, row) {
+                    var cleanData = data.replace(/[^0-9.]/g, '');
+                    var numberData = parseFloat(cleanData);
+                    if (type === 'display') {
+                        return formatNumber(numberData);
+                    } else {
+                        return numberData;
+                    }
+                }
+            }
+        ]
+    });
     
     const updateTransactions = () => {
         const transactionsTable = document.querySelector('.transactions-table tbody');
@@ -307,7 +315,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         row.appendChild(typeCell);
                         const amountCell = document.createElement('td');
                         amountCell.textContent = (transaction.transaction_type === 'buy' ? '+' : '-') + transaction.amount;
-                        amountCell.className = transaction.transaction_type === 'buy' ? 'transaction-positive' : 'transaction-negative';
+                        amountCell.className = transaction.transaction_type === 'buy' ? 'positive' : 'negative';
                         row.appendChild(amountCell);
                         transactionsTable.appendChild(row);
                     }
@@ -316,4 +324,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     };
 
     updateTransactions();
+
+    const copyrightElement = document.getElementById('copyright');
+    if (copyrightElement) {
+        copyrightElement.textContent += ' ' + new Date().getFullYear();
+    }
 });

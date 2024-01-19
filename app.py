@@ -1,7 +1,7 @@
 import re
 import requests
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from decimal import Decimal, ROUND_DOWN
@@ -42,7 +42,7 @@ def markets():
 def trade():
     """Trade cryptocurrencies"""
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect("/login")
 
     user_id = session["user_id"]
 
@@ -63,7 +63,7 @@ def trade():
             return jsonify({'success': False, 'error': 'Missing isBuy in trade data'}), 400
 
         if trade['isBuy']:
-            if round(float(cash[0]['cash']), 2) < float(trade['cash']):
+            if cash[0]['cash'] < float(trade['cash']):
                 return jsonify({'success': False, 'error': 'Insufficient cash'}), 400
 
             db.execute("INSERT INTO transactions (user_id, name, crypto_symbol, amount, transaction_type, purchase_price, transaction_date) VALUES (?, ?, ?, ?, ?, ?, datetime('now'))", user_id, trade['coinName'], trade['coinSymbol'], int(float(trade['coinAmount']) * 10**6) / 10**6, 'buy', trade['currentPrice'])
@@ -97,8 +97,11 @@ def get_coin_amount():
     rows = db.execute(
         'SELECT SUM(amount) as total FROM transactions WHERE user_id = ? AND name = ?',
         user_id, coin_id,)
-    row = rows[0] if rows else None
-    coin_amount = row['total'] if row['total'] else 0
+    coin_amount = 0
+    if rows:
+        row = rows[0]
+        if row['total']:
+            coin_amount = row['total']
 
     return jsonify({'coin_amount': coin_amount})
 
@@ -106,30 +109,19 @@ def get_coin_amount():
 def wallet():
     """Display user's wallet"""
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect("/login")
     
     user_id = session["user_id"]
 
     crypto_names = db.execute("SELECT DISTINCT name FROM transactions WHERE user_id = ?", user_id)
 
     wallet = []
-    for symbol in crypto_names:
-
-
-        bought_amount = db.execute("SELECT ROUND(SUM(amount), 6) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'buy'", user_id, symbol['name'])
-        bought_amount = bought_amount[0]['total'] if bought_amount[0]['total'] else 0
-
-        sold_amount = db.execute("SELECT ROUND(SUM(amount), 6) as total FROM transactions WHERE user_id = ? AND name = ? AND transaction_type = 'sell'", user_id, symbol['name'])
-        sold_amount = sold_amount[0]['total'] if sold_amount[0]['total'] else 0
-
-        bought_amount_decimal = Decimal(str(bought_amount)).quantize(Decimal('0.000001'), rounding=ROUND_DOWN)
-        sold_amount_decimal = Decimal(str(sold_amount)).quantize(Decimal('0.000001'), rounding=ROUND_DOWN)
-
-        current_amount_decimal = bought_amount_decimal + sold_amount_decimal
-        current_amount = float(current_amount_decimal)
+    for crypto in crypto_names:
+        amount = db.execute("SELECT ROUND(SUM(amount), 6) as total FROM transactions WHERE user_id = ? AND name = ?", user_id, crypto['name'])
+        current_amount = float(amount[0]['total'])
         
         if current_amount > 0:
-            response = requests.get(f'https://api.coincap.io/v2/assets/{symbol["name"]}')
+            response = requests.get(f'https://api.coincap.io/v2/assets/{crypto["name"]}')
             coin_data = response.json()
             coin = coin_data['data']
 
@@ -148,11 +140,11 @@ def wallet():
 def transactions():
     """Display user's transactions"""
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect("/login")
     
     user_id = session["user_id"]
 
-    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date DESC", user_id)
+    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ?", user_id)
 
     return render_template("transactions.html", transactions=transactions)
 
@@ -161,17 +153,19 @@ def transactions():
 def register():
     """Register user"""
     if 'user_id' in session:
-        return redirect(url_for('home'))
+        return redirect('/')
     
     elif request.method == "POST":
-        def apology(message, code):
+        def apology_email(message, code):
             """Render an apology to the user."""
             flash(message)
             email = request.form.get("email")
-            if email and '@' in email and '.' in email:
-                return render_template('register.html', email=email), code
-            else:
-                return render_template('register.html'), code
+            return render_template('register.html', email=email), code
+
+        def apology(message, code):
+            """Render an apology to the user."""
+            flash(message)
+            return render_template('register.html'), code
 
         if not request.form.get("email"):
             return apology("Must provide email address", 400)
@@ -186,16 +180,16 @@ def register():
             return apology("Invalid email address", 400)
 
         elif not request.form.get("password"):
-            return apology("Must provide password", 400)
+            return apology_email("Must provide password", 400)
 
         elif len(request.form.get("password")) < 8:
-            return apology("Password must be at least 8 characters", 400)
+            return apology_email("Password must be at least 8 characters", 400)
 
         elif not request.form.get("confirmation"):
-            return apology("Must confirm password", 400)
+            return apology_email("Must confirm password", 400)
 
         elif request.form.get("password") != request.form.get("confirmation"):
-            return apology("Password and confirmation must match", 400)
+            return apology_email("Password and confirmation must match", 400)
 
         result = db.execute(
             "INSERT INTO users (email, hash) VALUES (?, ?)",
@@ -212,7 +206,6 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
-
     session.clear()
 
     if request.method == "POST":
@@ -245,7 +238,6 @@ def login():
 @app.route("/logout")
 def logout():
     """Log user out"""
-
     session.clear()
 
     return redirect("/")

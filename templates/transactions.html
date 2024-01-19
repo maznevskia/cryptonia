@@ -19,7 +19,7 @@ Transactions
                 {% for transaction in transactions %}
                     <tr id="transaction-row">
                         <td>{{ transaction.crypto_symbol }}</td>
-                        <td class="{{ 'transaction-positive' if transaction.transaction_type == 'buy' else 'transaction-negative' }}">
+                        <td class="{{ 'positive' if transaction.transaction_type == 'buy' else 'negative' }}">
                             {{ '+' if transaction.transaction_type == 'buy' }}{{ transaction.amount }}
                         </td>
                         <td>${{ transaction.purchase_price }}</td>

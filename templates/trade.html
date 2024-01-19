@@ -14,21 +14,23 @@ Trade
         <div class="trade-details">
             <div>
                 <select id="coin-select" class="trade-primary">
-                    <option value="" class="trade-text" disabled selected>Select a coin</option>
+                    <option value="" disabled selected>Select a coin</option>
                     {% for coin in coins %}
-                    <option class="trade-text" value="{{ coin['id'] }}">{{ coin['name'] }}</option>
+                    <option value="{{ coin['id'] }}">{{ coin['name'] }} ({{ coin['symbol'] }}) </option>
                     {% endfor %}
                 </select>
-                <div id="coin-price" class="trade-text"></div>
+                <div id="coin-price"></div>
             </div>
             <div>
-                <div id="cash-holdings" class="trade-text">Cash: ${{ "%.2f"|format(cash[0].cash) }}</div>
-                <div id="coin-holdings" class="trade-text"></div>
+                <div id="cash-holdings">Cash: ${{ "%.2f"|format(cash[0].cash) }}</div>
+                <div id="coin-holdings"></div>
             </div>
             <div>
                 <h3 id="error-message"></h3>
-                <input type="number" id="cash-input" placeholder="Enter cash amount" class="trade-primary">
-                <input type="number" id="coin-amount" placeholder="Enter coin amount" class="trade-primary">
+                <form novalidate>
+                    <input type="number" id="cash-input" placeholder="Enter cash amount" class="trade-primary">
+                </form>
+                <input type="number" step="0.000001" id="coin-amount" placeholder="Enter coin amount" class="trade-primary">
             </div>
             <button id="action-btn" class="buy-button">Buy</button>
         </div>
